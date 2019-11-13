@@ -51,7 +51,7 @@ void Client::authorize(){
     try{
         client->authorize(user, pass);
         cout << "authorized" << endl;
-    }catch(InvalidAuthorization e){
+    }catch(InvalidAuthorization& e){
         cout << "invalid authorization, connection closed" << endl;
     }catch(...){
         cout << "error, probably not connected" << endl;
@@ -64,12 +64,14 @@ void Client::requestClaim(){
     cin >> claim;
     
     try{
-        client->requestClaim(claim);
-        cout << "claim granted" << endl;
-    }catch(UnauthorizedClaim e){
-        cout << "error, not authorized for this claim" << endl;
-    }catch(InvalidClaim e){
-        cout << "error, claim does not exist" << endl;
+        int crs = client->requestClaim(claim);
+        if(crs == ClaimRequestStatus::GRANTED){
+            cout << "claim granted" << endl;
+        }else if(crs == ClaimRequestStatus::UNAUTHORIZED){
+            cout << "not authorized for this claim" << endl;
+        }else if(crs == ClaimRequestStatus::NONEXISTENT){
+            cout << "claim does not exist" << endl;
+        }
     }catch(...){
         cout << "error, probably not connected" << endl;
     }

@@ -5,6 +5,7 @@
 #include <string>
 #include <filesystem>
 #include <SecurityProvider.h>
+#include <SecurityProvider_constants.h>
 
 //thrift
 #include <thrift/protocol/TBinaryProtocol.h>
@@ -55,7 +56,7 @@ class SecurityProviderHandler : virtual public SecurityProviderIf {
 
   void authorize(const std::string& username, const std::string& password);
   
-  void requestClaim(const std::string& claim);
+  ClaimRequestStatus::type requestClaim(const std::string& claim);
 
   void getToken(std::string& _return);
 

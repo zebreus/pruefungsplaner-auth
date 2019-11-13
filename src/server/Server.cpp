@@ -67,11 +67,12 @@ void SecurityProviderHandler::authorize(const std::string& username, const std::
 	}
 }
 
-void SecurityProviderHandler::requestClaim(const std::string& claim) {
+ClaimRequestStatus::type SecurityProviderHandler::requestClaim(const std::string& claim) {
 	spdlog::info("{} called requestClaim", peerAddress);
 	try {
         
         spdlog::info("requestClaim");
+        return ClaimRequestStatus::GRANTED;
 
 	} catch (const TException& error) {
 		spdlog::warn("{} failed in requestClaim; ThriftException: {}", peerAddress, error.what());

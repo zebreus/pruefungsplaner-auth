@@ -1,15 +1,12 @@
-
 #!/usr/local/bin/thrift --gen cpp
 
 namespace cpp SecurityProviderThrift
 
-exception InvalidClaim {
-1: string message,
-}
-
-exception UnauthorizedClaim {
-1: string message,
-}
+enum ClaimRequestStatus {
+    GRANTED,
+    UNAUTHORIZED,
+    NONEXISTENT
+} 
 
 exception InvalidAuthorization {
 1: string message,
@@ -21,6 +18,6 @@ exception InternalServerError {
 
 service SecurityProvider {
   void authorize(1:string username, 2:string password),
-  void requestClaim(1:string claim),
+  ClaimRequestStatus requestClaim(1:string claim),
   string getToken()
 }
