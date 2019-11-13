@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <filesystem>
+#include "SecurityProvider.hpp"
 #include <SecurityProvider.h>
 #include <SecurityProvider_constants.h>
 
@@ -49,6 +50,7 @@ bool dontCrash;
 class SecurityProviderHandler : virtual public SecurityProviderIf {
  private:
   string peerAddress;
+  shared_ptr<securityprovider::SecurityProvider> securityProvider;
  public:
   SecurityProviderHandler(const string& peerAddress);
   

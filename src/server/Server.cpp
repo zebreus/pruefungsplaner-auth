@@ -3,8 +3,9 @@
 SecurityProviderHandler::SecurityProviderHandler(const string& peerAddress)
 	: peerAddress(peerAddress)
 {
+    spdlog::debug("{} connected", peerAddress);
 	try {
-		spdlog::info("{} connected", peerAddress);
+        securityProvider = std::make_shared<securityprovider::SecurityProvider>(peerAddress);
         
 	} catch (const TException& error) {
 		if (dontCrash) {
@@ -32,14 +33,14 @@ SecurityProviderHandler::SecurityProviderHandler(const string& peerAddress)
 
 SecurityProviderHandler::~SecurityProviderHandler()
 {
-	spdlog::info("{} disconnected", peerAddress);
+	spdlog::debug("{} disconnected", peerAddress);
 }
 
 void SecurityProviderHandler::authorize(const std::string& username, const std::string& password) {
-	spdlog::info("{} called authorize", peerAddress);
+	spdlog::debug("{} called authorize", peerAddress);
 	try {
         
-        spdlog::info("authorize");
+        securityProvider->authorize(username, password);
 
 	} catch (const TException& error) {
 		spdlog::warn("{} failed in authorize; ThriftException: {}", peerAddress, error.what());
@@ -68,11 +69,11 @@ void SecurityProviderHandler::authorize(const std::string& username, const std::
 }
 
 ClaimRequestStatus::type SecurityProviderHandler::requestClaim(const std::string& claim) {
-	spdlog::info("{} called requestClaim", peerAddress);
+	spdlog::debug("{} called requestClaim", peerAddress);
 	try {
         
-        spdlog::info("requestClaim");
-        return ClaimRequestStatus::GRANTED;
+        ClaimRequestStatus::type _return = securityProvider->requestClaim(claim);
+        return _return;
 
 	} catch (const TException& error) {
 		spdlog::warn("{} failed in requestClaim; ThriftException: {}", peerAddress, error.what());
@@ -101,11 +102,10 @@ ClaimRequestStatus::type SecurityProviderHandler::requestClaim(const std::string
 }
 
 void SecurityProviderHandler::getToken(std::string& _return) {
-	spdlog::info("{} called getToken", peerAddress);
+	spdlog::debug("{} called getToken", peerAddress);
 	try {
         
-        spdlog::info("getToken");
-        _return = "THIS_IS_A_TOKEN";
+        _return = securityProvider->getToken();
 
 	} catch (const TException& error) {
 		spdlog::warn("{} failed in getToken; ThriftException: {}", peerAddress, error.what());

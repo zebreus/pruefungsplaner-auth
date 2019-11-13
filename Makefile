@@ -18,7 +18,7 @@ CPPFLAGS = -Wall -Wformat -Os -std=c++17
 
 #Sourcecode and flags
 SERVER_EXE = server
-SERVER_SOURCES = $(SERVER)/Server.cpp
+SERVER_SOURCES = $(SERVER)/Server.cpp $(SERVER)/SecurityProvider.cpp
 SERVER_OBJS = $(addsuffix .o, $(basename $(SERVER_SOURCES)))
 SERVER_CPP = $(THRIFT_CPP) -I$(SPDLOG) -I$(JWT) -I$(CXXOPTS)
 SERVER_LDFLAGS = -lpthread $(THRIFT_LDFLAGS)
@@ -37,7 +37,7 @@ THRIFT_CPP = -I$(THRIFT_GENERATED)/ -I/usr/local/include/thrift
 THRIFT_LDFLAGS = -L/usr/local/lib -lthrift
 
 #Build rules
-all:
+all: server client
 
 $(SERVER_OBJS): %.o : %.cpp
 	$(CPP) $(CPPFLAGS) $(SERVER_CPP) -c -o $@ $<
