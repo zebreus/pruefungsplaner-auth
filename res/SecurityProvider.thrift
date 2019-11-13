@@ -15,7 +15,11 @@ exception InvalidAuthorization {
 1: string message,
 }
 
-service CertificateGenerator {
+exception InternalServerError {
+1: string message,
+}
+
+service SecurityProvider {
   void authorize(1:string username, 2:string password),
   void requestClaim(1:string claim),
   string getToken()
