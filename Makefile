@@ -21,13 +21,13 @@ SERVER_EXE = server
 SERVER_SOURCES = $(SERVER)/Server.cpp $(SERVER)/SecurityProvider.cpp
 SERVER_OBJS = $(addsuffix .o, $(basename $(SERVER_SOURCES)))
 SERVER_CPP = $(THRIFT_CPP) -I$(SPDLOG) -I$(JWT) -I$(CXXOPTS)
-SERVER_LDFLAGS = -lpthread $(THRIFT_LDFLAGS)
+SERVER_LDFLAGS = -lpthread $(THRIFT_LDFLAGS) -L/usr/lib -lssl -lcrypto
 
 CLIENT_EXE = client
 CLIENT_SOURCES = $(CLIENT)/Client.cpp
 CLIENT_OBJS = $(addsuffix .o, $(basename $(CLIENT_SOURCES)))
 CLIENT_CPP = $(THRIFT_CPP) -I$(NLOHMANN_JSON)/ -I$(SPDLOG) -I$(JWT)  -I$(CXXOPTS)
-CLIENT_LDFLAGS = $(THRIFT_LDFLAGS)
+CLIENT_LDFLAGS = $(THRIFT_LDFLAGS) -L/usr/lib -lssl -lcrypto
 
 THRIFT_SOURCES = $(THRIFT_GENERATED)/$(basename $(THRIFTFILE)).cpp
 THRIFT_SOURCES += $(THRIFT_GENERATED)/$(basename $(THRIFTFILE))_constants.cpp
