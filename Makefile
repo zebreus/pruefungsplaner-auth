@@ -16,6 +16,10 @@ THRIFT = thrift
 THRIFTFILE = SecurityProvider.thrift
 CPPFLAGS = -Wall -Wformat -Os -std=c++17
 
+#Debug keys
+PRIVATE_KEY = $(RESOURCES)/private_key.pem
+PUBLIC_KEY = $(RESOURCES)/public_key.pem
+
 #Sourcecode and flags
 SERVER_EXE = server
 SERVER_SOURCES = $(SERVER)/Server.cpp $(SERVER)/SecurityProvider.cpp
@@ -90,3 +94,13 @@ format-$(MAIN)%.h: $(MAIN)%.h
 	clang-format $< -style="{BasedOnStyle: webkit, IndentWidth: 4, TabWidth: 4, UseTab: ForContinuationAndIndentation}" > $<_2
 	mv $<_2 $<
 	rm -f $<_2
+	
+keys: $(PRIVATE_KEY) $(PUBLIC_KEY)
+
+$(PRIVATE_KEY):
+	mkdir -p $(RESOURCES)
+	openssl genpkey -algorithm RSA -out $(PRIVATE_KEY) -pkeyopt rsa_keygen_bits:2048
+	
+$(PUBLIC_KEY): $(PRIVATE_KEY)
+	openssl rsa -pubout -in $(PRIVATE_KEY) -out $(PUBLIC_KEY)
+
