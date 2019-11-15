@@ -3,6 +3,7 @@
 
 #include <sstream>
 #include <string>
+#include <fstream>
 #include <filesystem>
 #include "SecurityProvider.hpp"
 #include <SecurityProvider.h>
@@ -46,6 +47,9 @@ using namespace  ::SecurityProviderThrift;
 using namespace std;
 
 bool dontCrash;
+//TODO find better place
+string privateKey;
+string publicKey;
 
 class SecurityProviderHandler : virtual public SecurityProviderIf {
  private:

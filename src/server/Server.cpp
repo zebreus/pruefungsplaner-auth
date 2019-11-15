@@ -158,6 +158,8 @@ int main(int argc, char** argv)
 	try {
 		cxxopts::Options options(argv[0], "Security Provider server");
 		options.add_options()
+            ("private_key", "The file storing the rsa 2048bit private key", cxxopts::value<string>())
+            ("public_key", "The file storing the rs 2048bit public key", cxxopts::value<string>())
 			("p,port", "The port on which the server listens", cxxopts::value<int>())
             ("dont-crash", "Catch all exceptions inside handlers", cxxopts::value<bool>(dontCrash))
             ("help", "Print help");
@@ -184,6 +186,40 @@ int main(int argc, char** argv)
 		} else {
 			throw cxxopts::OptionException("No port specified");
 		}
+        if (result.count("public_key")) {
+			filesystem::path keyFile(result["public_key"].as<string>());
+            if(filesystem::exists(keyFile)){
+                ifstream keyFileStream(keyFile);
+                if(keyFileStream.is_open()){
+                    stringstream keyStringStream;
+                    keyStringStream << keyFileStream.rdbuf();
+                    publicKey = keyStringStream.str();
+                }else{
+                    throw cxxopts::OptionException("Unable to open public key file");
+                }
+            }else{
+                throw cxxopts::OptionException("Public key file does not exist");
+            }
+		}else{
+            throw cxxopts::OptionException("No public key file specified");
+        }
+        if (result.count("private_key")) {
+			filesystem::path keyFile(result["private_key"].as<string>());
+            if(filesystem::exists(keyFile)){
+                ifstream keyFileStream(keyFile);
+                if(keyFileStream.is_open()){
+                    stringstream keyStringStream;
+                    keyStringStream << keyFileStream.rdbuf();
+                    privateKey = keyStringStream.str();
+                }else{
+                    throw cxxopts::OptionException("Unable to open private key file");
+                }
+            }else{
+                throw cxxopts::OptionException("Private key file does not exist");
+            }
+		}else{
+            throw cxxopts::OptionException("No private key file specified");
+        }
 		if (result.count("quiet") && result["quiet"].as<bool>()) {
 			logLevel = spdlog::level::off;
 		}
