@@ -6,6 +6,7 @@
 #include <SecurityProvider_types.h>
 #include "spdlog/spdlog.h"
 #include <jwt.h>
+#include <chrono>
 
 using namespace std;
 using namespace jwt;
@@ -32,7 +33,7 @@ public:
 private:
   string id;
   map<string, string> grantedClaims;
-  long creationTimestamp;
+  std::chrono::time_point<std::chrono::system_clock> creationTimestamp;
   string username;
   string password;
 };
