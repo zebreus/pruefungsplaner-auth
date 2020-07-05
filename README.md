@@ -1,2 +1,2 @@
 # securityProvider
-Providing json webtokens via thrift.
+Providing json webtokens via jsonrpc.
