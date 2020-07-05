@@ -1,0 +1,3 @@
+[submodule "libs/qt-jsonrpc-server"]
+	path = libs/qt-jsonrpc-server
+	url = git@github.com:Zebreus/qt-jsonrpc-server.git

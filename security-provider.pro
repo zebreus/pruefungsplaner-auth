@@ -1,7 +1,12 @@
+INCLUDEPATH += $$PWD/src
+DEPENDPATH += $$PWD
+
 QT -= gui
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
+
+include($$PWD/libs/qt-jsonrpc-server/qt-jsonrpc-server.pri)
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
