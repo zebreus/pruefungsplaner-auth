@@ -6,7 +6,9 @@
 #include <QJsonValue>
 #include <QJsonArray>
 #include <chrono>
+#include "QtJsonTraits.h"
 #include "jwt-cpp/jwt.h"
+
 
 class SecurityProvider : public QObject
 {

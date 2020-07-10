@@ -27,7 +27,7 @@ QString SecurityProvider::getToken(QString userName, QString password, QJsonValu
     }
 
     //Added registered and public claims
-    jwt::builder tokenBuilder = jwt::create()
+    jwt::builder tokenBuilder = jwt::create<qt_json_traits>()
     .set_type("JWT")
     .set_issuer("securityprovider")
     //TODO maybe sanitize username
@@ -39,10 +39,10 @@ QString SecurityProvider::getToken(QString userName, QString password, QJsonValu
     .set_expires_at(expirationTime);
 
     for(QString claim : claims){
-        tokenBuilder.set_payload_claim(claim.toUtf8().constData(), jwt::claim((std::string)"true"));
+        tokenBuilder.set_payload_claim(claim.toUtf8().constData(), jwt::basic_claim<qt_json_traits>(QString("true")));
     }
 
-    std::string token =  tokenBuilder.sign(jwt::algorithm::rs256(publicKey.toUtf8().constData(),privateKey.toUtf8().constData(),"",""));
+    QString token =  tokenBuilder.sign(jwt::algorithm::rs256(publicKey.toUtf8().constData(),privateKey.toUtf8().constData(),"",""));
 
-    return QString::fromStdString(token);
+    return token;
 }
