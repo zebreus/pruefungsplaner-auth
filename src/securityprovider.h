@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QString>
 #include <QJsonValue>
+#include <QJsonArray>
+#include <chrono>
+#include "jwt-cpp/jwt.h"
 
 class SecurityProvider : public QObject
 {

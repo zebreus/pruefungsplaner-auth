@@ -1,4 +1,5 @@
 INCLUDEPATH += $$PWD/src
+INCLUDEPATH += $$PWD/libs
 DEPENDPATH += $$PWD
 
 QT -= gui
@@ -27,6 +28,8 @@ SOURCES += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+LIBS += -L/usr/lib -lssl -lcrypto
 
 HEADERS += \
     src/securityprovider.h
