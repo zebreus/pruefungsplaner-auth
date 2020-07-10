@@ -1,7 +1,7 @@
 INCLUDEPATH += $$PWD/src
 INCLUDEPATH += $$PWD/libs
 DEPENDPATH += $$PWD
-
+DEFINES += "DISABLE_PICOJSON"
 QT -= gui
 
 CONFIG += c++11 console
@@ -32,4 +32,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 LIBS += -L/usr/lib -lssl -lcrypto
 
 HEADERS += \
-    src/securityprovider.h
+    src/QtJsonTraits.h \
+    src/securityprovider.h \
+    libs/jwt-cpp/jwt.h \
+    libs/jwt-cpp/base.h
