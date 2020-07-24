@@ -5,7 +5,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonDocument>
-#include "libs/jwt-cpp/jwt.h"
+#include "jwt-cpp/jwt.h"
 
 struct qt_json_traits {
     // Type Specifications

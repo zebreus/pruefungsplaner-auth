@@ -1,5 +1,6 @@
 INCLUDEPATH += $$PWD/src
 INCLUDEPATH += $$PWD/libs
+INCLUDEPATH += $$PWD/libs/jwt-cpp/include
 DEPENDPATH += $$PWD
 DEFINES += "DISABLE_PICOJSON"
 QT -= gui
@@ -34,5 +35,5 @@ LIBS += -L/usr/lib -lssl -lcrypto
 HEADERS += \
     src/QtJsonTraits.h \
     src/securityprovider.h \
-    libs/jwt-cpp/jwt.h \
-    libs/jwt-cpp/base.h
+    jwt-cpp/jwt.h \
+    jwt-cpp/base.h
