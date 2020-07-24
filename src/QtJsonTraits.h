@@ -147,6 +147,51 @@ struct qt_json_traits {
 
         return result;
     }
+
+    //Functions for json objects
+    static int object_count(const object_type& object, const string_type& key) {
+        return (int)object.contains(key);
+    }
+
+    static void object_for_each(const object_type& object, std::function<void(const string_type&, const value_type&)> function) {
+        for(QJsonObject::const_iterator value = object.begin(); value!=object.end(); value++){
+            function(value.key(), value.value());
+        }
+    }
+
+    //Functions for json strings
+    static std::string string_to_std(const string_type& string) {
+        return std::string(string.toLatin1().constData());
+    }
+
+    static string_type string_from_std(const std::string& string) {
+        return QString::fromLatin1(string.data(), string.size());
+    }
+
+    template<typename Value>
+    class ValueCreator{
+    public:
+        ValueCreator(const Value& value);
+        QJsonValue get();
+    private:
+        QJsonValue jsonValue;
+    };
+
+    template<typename Iterator>
+    static const array_type array_construct(Iterator begin, Iterator end){
+        QJsonArray array;
+        for(auto value = begin; value!=end; value++){
+            auto realValue = *value;
+            array.append(ValueCreator<decltype(realValue)>(realValue).get());
+        }
+        return array;
+    }
+
+    static void array_for_each(const array_type& array, std::function<void(const value_type&)> function) {
+        for(const value_type& value : array){
+            function(value);
+        }
+    }
 };
 
 #endif // QTJSONTRAITS_H
