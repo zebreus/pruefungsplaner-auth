@@ -21,6 +21,7 @@ public:
 
 public slots:
     QString getToken(QString userName, QString password, QJsonValue claimsArray);
+    QString getPublicKey();
 
 signals:
 

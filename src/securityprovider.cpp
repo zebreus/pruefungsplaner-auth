@@ -46,3 +46,8 @@ QString SecurityProvider::getToken(QString userName, QString password, QJsonValu
 
     return token;
 }
+
+QString SecurityProvider::getPublicKey()
+{
+    return publicKey;
+}
