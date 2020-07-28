@@ -51,3 +51,8 @@ QString SecurityProvider::getPublicKey()
 {
     return publicKey;
 }
+
+QString SecurityProvider::getIssuer()
+{
+    return "securityprovider";
+}
