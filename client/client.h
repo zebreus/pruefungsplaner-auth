@@ -10,7 +10,9 @@
 #include <QJsonValue>
 #include <QJsonArray>
 
-class SecurityProviderClient : public QObject
+namespace securityprovider{
+
+class Client : public QObject
 {
     Q_OBJECT
 public:
@@ -20,7 +22,7 @@ public:
         INVALID_RESPONSE,
         SERVER_ERROR
     };
-    explicit SecurityProviderClient(QObject *parent = nullptr);
+    explicit Client(QObject *parent = nullptr);
     //Connection not open -> opens connection
     //Connection open -> does nothing
     void open(const QUrl &url);
@@ -73,5 +75,7 @@ private Q_SLOTS:
     void onTextMessageReceived(const QString& message);
     void onDisconnected();
 };
+
+}
 
 #endif // SECURITYUSERCLIENT_H

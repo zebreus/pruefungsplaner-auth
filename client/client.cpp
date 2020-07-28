@@ -1,16 +1,18 @@
 #include "client.h"
 
-SecurityProviderClient::SecurityProviderClient(QObject *parent):
+namespace securityprovider {
+
+Client::Client(QObject *parent):
     QObject(parent), webSocket()
 {
-    connect(&webSocket, &QWebSocket::connected, this, &SecurityProviderClient::onConnected);
-    connect(&webSocket, &QWebSocket::disconnected, this, &SecurityProviderClient::onDisconnected);
-    connect(&webSocket, &QWebSocket::textMessageReceived, this, &SecurityProviderClient::onTextMessageReceived);
-    connect(&webSocket, &QWebSocket::binaryMessageReceived, this, &SecurityProviderClient::onBinaryMessageReceived);
-    connect(&webSocket, QOverload<QAbstractSocket::SocketError>::of(&QWebSocket::error), this, &SecurityProviderClient::onError);
+    connect(&webSocket, &QWebSocket::connected, this, &Client::onConnected);
+    connect(&webSocket, &QWebSocket::disconnected, this, &Client::onDisconnected);
+    connect(&webSocket, &QWebSocket::textMessageReceived, this, &Client::onTextMessageReceived);
+    connect(&webSocket, &QWebSocket::binaryMessageReceived, this, &Client::onBinaryMessageReceived);
+    connect(&webSocket, QOverload<QAbstractSocket::SocketError>::of(&QWebSocket::error), this, &Client::onError);
 }
 
-void SecurityProviderClient::getToken(const QString& username, const QString& password, const QList<QString>& claims, const QList<QString>& audiences)
+void Client::getToken(const QString& username, const QString& password, const QList<QString>& claims, const QList<QString>& audiences)
 {
     Request request;
     request.type = TOKEN;
@@ -25,32 +27,32 @@ void SecurityProviderClient::getToken(const QString& username, const QString& pa
     }
 }
 
-void SecurityProviderClient::getToken(const QString &username, const QString &password, const QList<QString> &claims, const QString &audience)
+void Client::getToken(const QString &username, const QString &password, const QList<QString> &claims, const QString &audience)
 {
     getToken(username, password, claims, QList<QString>{audience});
 }
 
-void SecurityProviderClient::getToken(const QString &username, const QString &password, const QList<QString> &claims)
+void Client::getToken(const QString &username, const QString &password, const QList<QString> &claims)
 {
     getToken(username, password, claims, QList<QString>{});
 }
 
-void SecurityProviderClient::getToken(const QString &username, const QString &password, const QString &claim, const QList<QString> &audiences)
+void Client::getToken(const QString &username, const QString &password, const QString &claim, const QList<QString> &audiences)
 {
     getToken(username, password, QList<QString>{claim}, audiences);
 }
 
-void SecurityProviderClient::getToken(const QString &username, const QString &password, const QString &claim, const QString &audience)
+void Client::getToken(const QString &username, const QString &password, const QString &claim, const QString &audience)
 {
     getToken(username, password, QList<QString>{claim}, QList<QString>{audience});
 }
 
-void SecurityProviderClient::getToken(const QString &username, const QString &password, const QString &claim)
+void Client::getToken(const QString &username, const QString &password, const QString &claim)
 {
     getToken(username, password, QList<QString>{claim}, QList<QString>{});
 }
 
-void SecurityProviderClient::getPublicKey()
+void Client::getPublicKey()
 {
     Request request;
     request.type = PUBLIC_KEY;
@@ -61,7 +63,7 @@ void SecurityProviderClient::getPublicKey()
     }
 }
 
-void SecurityProviderClient::getIssuer()
+void Client::getIssuer()
 {
     Request request;
     request.type = ISSUER;
@@ -73,14 +75,14 @@ void SecurityProviderClient::getIssuer()
 
 }
 
-void SecurityProviderClient::open(const QUrl &url)
+void Client::open(const QUrl &url)
 {
     if(!webSocket.isValid()){
         webSocket.open(url);
     }
 }
 
-QString SecurityProviderClient::buildTokenRequest(const SecurityProviderClient::Request &request, int id)
+QString Client::buildTokenRequest(const Client::Request &request, int id)
 {
     QJsonObject jsonRequest;
     jsonRequest["jsonrpc"] = "2.0";
@@ -97,7 +99,7 @@ QString SecurityProviderClient::buildTokenRequest(const SecurityProviderClient::
     return doc.toJson(QJsonDocument::Compact);
 }
 
-QString SecurityProviderClient::buildPublicKeyRequest(int id)
+QString Client::buildPublicKeyRequest(int id)
 {
     QJsonObject jsonRequest;
     jsonRequest["jsonrpc"] = "2.0";
@@ -108,7 +110,7 @@ QString SecurityProviderClient::buildPublicKeyRequest(int id)
     return doc.toJson(QJsonDocument::Compact);
 }
 
-QString SecurityProviderClient::buildIssuerRequest(int id)
+QString Client::buildIssuerRequest(int id)
 {
     QJsonObject jsonRequest;
     jsonRequest["jsonrpc"] = "2.0";
@@ -119,7 +121,7 @@ QString SecurityProviderClient::buildIssuerRequest(int id)
     return doc.toJson(QJsonDocument::Compact);
 }
 
-void SecurityProviderClient::sendRequest(const SecurityProviderClient::Request &request)
+void Client::sendRequest(const Client::Request &request)
 {
     int id = currentId++;
     QString message;
@@ -137,7 +139,7 @@ void SecurityProviderClient::sendRequest(const SecurityProviderClient::Request &
     webSocket.sendTextMessage(message);
 }
 
-void SecurityProviderClient::onConnected()
+void Client::onConnected()
 {
     qDebug("Connected");
     for(const Request& request : pendingRequests){
@@ -146,17 +148,17 @@ void SecurityProviderClient::onConnected()
     pendingRequests.clear();
 }
 
-void SecurityProviderClient::onError(QAbstractSocket::SocketError e)
+void Client::onError(QAbstractSocket::SocketError e)
 {
     emit socketError(e);
 }
 
-void SecurityProviderClient::onBinaryMessageReceived(const QByteArray &message)
+void Client::onBinaryMessageReceived(const QByteArray &message)
 {
     onTextMessageReceived(QString::fromLatin1(message));
 }
 
-void SecurityProviderClient::onTextMessageReceived(const QString& message)
+void Client::onTextMessageReceived(const QString& message)
 {
     qDebug() << message;
     QJsonDocument document = QJsonDocument::fromJson(message.toLatin1());
@@ -197,7 +199,9 @@ void SecurityProviderClient::onTextMessageReceived(const QString& message)
     }
 }
 
-void SecurityProviderClient::onDisconnected()
+void Client::onDisconnected()
 {
     //TODO do something
+}
+
 }
