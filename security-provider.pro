@@ -35,3 +35,13 @@ LIBS += -L/usr/lib -lssl -lcrypto
 HEADERS += \
     src/QtJsonTraits.h \
     src/securityprovider.h
+
+# Extra target to generate rsa256 keys
+keys.target = keys
+keys.commands = \
+    mkdir -p res;\
+    openssl genpkey -algorithm RSA -out res/private_key.pem -pkeyopt rsa_keygen_bits:2048;\
+    openssl rsa -pubout -in res/private_key.pem -out res/public_key.pem
+keys.depends =
+
+QMAKE_EXTRA_TARGETS += keys
