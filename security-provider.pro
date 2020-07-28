@@ -34,6 +34,4 @@ LIBS += -L/usr/lib -lssl -lcrypto
 
 HEADERS += \
     src/QtJsonTraits.h \
-    src/securityprovider.h \
-    jwt-cpp/jwt.h \
-    jwt-cpp/base.h
+    src/securityprovider.h
