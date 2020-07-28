@@ -161,11 +161,11 @@ struct qt_json_traits {
 
     //Functions for json strings
     static std::string string_to_std(const string_type& string) {
-        return std::string(string.toLatin1().constData());
+        return std::string(string.toUtf8().constData());
     }
 
     static string_type string_from_std(const std::string& string) {
-        return QString::fromLatin1(string.data(), string.size());
+        return QString::fromUtf8(string.data(), string.size());
     }
 
     template<typename Value>
