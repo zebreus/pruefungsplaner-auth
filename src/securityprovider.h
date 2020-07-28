@@ -20,7 +20,7 @@ public:
     explicit SecurityProvider(const QString& privateKey, const QString& publicKey, QObject *parent = nullptr);
 
 public slots:
-    QString getToken(QString userName, QString password, QJsonValue claimsArray);
+    QString getToken(QString userName, QString password, QJsonValue claimsArray, QJsonArray audiences);
     QString getPublicKey();
     QString getIssuer();
 

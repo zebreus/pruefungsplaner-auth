@@ -6,12 +6,13 @@ SecurityProvider::SecurityProvider(const QString &privateKey, const QString &pub
 
 }
 
-QString SecurityProvider::getToken(QString userName, QString password, QJsonValue claimsArray)
+QString SecurityProvider::getToken(QString userName, QString password, QJsonValue claimsArray, QJsonArray audiences)
 {
     auto creationTime = std::chrono::system_clock::now();
     auto expirationTime = creationTime + std::chrono::seconds{3600};
 
     QList<QString> claims;
+    QJsonArray audience;
 
     if(userName == "test" && password == "test"){
 
@@ -32,9 +33,7 @@ QString SecurityProvider::getToken(QString userName, QString password, QJsonValu
     .set_issuer("securityprovider")
     //TODO maybe sanitize username
     .set_subject(userName.toUtf8().constData())
-    //TODO generate random id
-    .set_id("random id")
-    .set_audience("someone")
+    .set_audience(audiences)
     .set_issued_at(creationTime)
     .set_expires_at(expirationTime);
 
