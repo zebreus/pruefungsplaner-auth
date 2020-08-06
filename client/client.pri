@@ -1,12 +1,9 @@
-INCLUDEPATH += $$PWD
-DEPENDPATH += $$PWD
+INCLUDEPATH += $$PWD/include
 
 QT += websockets
 
-CONFIG += c++11
-
 SOURCES += \
-    $$PWD/client.cpp
+    $$PWD/src/security-provider-client.cpp
 
 HEADERS += \
-    $$PWD/client.h
+    $$PWD/include/security-provider/security-provider-client.h
