@@ -1,6 +1,6 @@
 [submodule "libs/qt-jsonrpc-server"]
 	path = libs/qt-jsonrpc-server
-	url = git@github.com:Zebreus/qt-jsonrpc-server.git
+	url = https://github.com/Zebreus/qt-jsonrpc-server.git
 [submodule "libs/jwt-cpp"]
 	path = libs/jwt-cpp
-	url = git@github.com:Zebreus/jwt-cpp.git
+	url = https://github.com/Zebreus/jwt-cpp.git
