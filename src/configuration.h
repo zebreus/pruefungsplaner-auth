@@ -17,7 +17,7 @@ class Configuration : public QObject
 {
     Q_OBJECT
 private:
-    static constexpr std::array defaultConfigurationFiles{"./config.toml",  "/etc/pruefungsplaner-config/config.toml"};
+    static constexpr std::array defaultConfigurationFiles{"./config.toml",  "/etc/pruefungsplaner-config/config.toml", "/dev/null"};
     static constexpr auto defaultAddress = "0.0.0.0";
     static constexpr uint32_t defaultPort = 9092;
     static constexpr auto defaultPrivateKey = "./private_key.pem";
