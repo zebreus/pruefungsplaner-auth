@@ -1,7 +1,7 @@
 #include "securityprovider.h"
 
-SecurityProvider::SecurityProvider(const QString &privateKey, const QString &publicKey, QObject *parent):
-    QObject(parent), privateKey(privateKey), publicKey(publicKey)
+SecurityProvider::SecurityProvider(const QSharedPointer<Configuration> &config, QObject *parent):
+    QObject(parent), configuration(config)
 {
 
 }
@@ -41,14 +41,14 @@ QString SecurityProvider::getToken(QString userName, QString password, QJsonValu
         tokenBuilder.set_payload_claim(claim.toUtf8().constData(), jwt::basic_claim<qt_json_traits>(QString("true")));
     }
 
-    QString token =  tokenBuilder.sign(jwt::algorithm::rs256(publicKey.toUtf8().constData(),privateKey.toUtf8().constData(),"",""));
+    QString token =  tokenBuilder.sign(jwt::algorithm::rs256(configuration->getPublicKey().toUtf8().constData(),configuration->getPrivateKey().toUtf8().constData(),"",""));
 
     return token;
 }
 
 QString SecurityProvider::getPublicKey()
 {
-    return publicKey;
+    return configuration->getPublicKey();
 }
 
 QString SecurityProvider::getIssuer()

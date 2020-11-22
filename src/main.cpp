@@ -10,11 +10,11 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    Configuration config(a.arguments());
+    QSharedPointer<Configuration> config(new Configuration(a.arguments()));
 
     //TODO Add support for host address to server
-    jsonrpc::Server<SecurityProvider> server(config.getPort());
-    server.setConstructorArguments(config.getPrivateKey(), config.getPublicKey());
+    jsonrpc::Server<SecurityProvider> server(config->getPort());
+    server.setConstructorArguments(config);
     server.startListening();
 
     return a.exec();

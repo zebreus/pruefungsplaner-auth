@@ -8,16 +8,16 @@
 #include <chrono>
 #include "QtJsonTraits.h"
 #include "jwt-cpp/jwt.h"
-
+#include "configuration.h"
+#include <QSharedPointer>
 
 class SecurityProvider : public QObject
 {
     Q_OBJECT
 private:
-    QString privateKey;
-    QString publicKey;
+    QSharedPointer<Configuration> configuration;
 public:
-    explicit SecurityProvider(const QString& privateKey, const QString& publicKey, QObject *parent = nullptr);
+    explicit SecurityProvider(const QSharedPointer<Configuration>& configuration, QObject *parent = nullptr);
 
 public slots:
     QString getToken(QString userName, QString password, QJsonValue claimsArray, QJsonArray audiences);
