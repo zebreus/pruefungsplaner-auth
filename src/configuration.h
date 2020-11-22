@@ -11,12 +11,17 @@
 #include "user.h"
 #include <string>
 #include <array>
+#include <cpptoml.h>
 
 class Configuration : public QObject
 {
     Q_OBJECT
 private:
     static constexpr std::array defaultConfigurationFiles{"./config.toml",  "/etc/pruefungsplaner-config/config.toml"};
+    static constexpr auto defaultAddress = "0.0.0.0";
+    static constexpr uint32_t defaultPort = 9092;
+    static constexpr auto defaultPrivateKey = "./private_key.pem";
+    static constexpr auto defaultPublicKey = "./public_key.pem";
     QString address;
     quint16 port;
     QString privateKey;

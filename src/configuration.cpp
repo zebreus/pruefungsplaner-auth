@@ -116,9 +116,60 @@ QString Configuration::getPrivateKey() const
     return privateKey;
 }
 
-void Configuration::loadConfiguration(const QFile&)
+void Configuration::loadConfiguration(const QFile& file)
 {
-    return;
+    try{
+        auto config = cpptoml::parse_file(file.fileName().toStdString());
+        auto parseAddress = config->get_as<std::string>("server.address").value_or(defaultAddress);
+        auto parsePort = config->get_as<uint16_t>("server.port").value_or(defaultPort);
+        auto parsePrivateKey = config->get_as<std::string>("security.privateKey").value_or(defaultPrivateKey);
+        auto parsePublicKey = config->get_as<std::string>("security.publicKey").value_or(defaultPublicKey);
+
+        if(address == ""){
+            address = QString().fromStdString(parseAddress);
+        }
+        if(port == 0){
+            port = parsePort;
+        }
+        if(privateKey == "" && publicKey == ""){
+            QFile privateKeyFile(QString().fromStdString(parsePrivateKey));
+            QFile publicKeyFile(QString().fromStdString(parsePublicKey));
+            readKeys(privateKeyFile, publicKeyFile);
+        }
+
+        auto userTableArray = config->get_table_array("user");
+
+        for (const auto& userTable : *userTableArray)
+        {
+            QString username;
+            QString password;
+            QList<QString> claims;
+
+            auto parsedUsername = userTable->get_as<std::string>("username");
+            if(!parsedUsername){
+                failConfiguration("Missing username in configuration file " + file.fileName() + ".");
+            }
+            username = QString().fromStdString(parsedUsername.value_or(""));
+
+            auto parsedPassword = userTable->get_as<std::string>("password");
+            if(!parsedPassword){
+                failConfiguration("Missing password for user " + username + " in configuration file " + file.fileName() + ".");
+            }
+            password = QString().fromStdString(*parsedPassword);
+
+            auto parsedClaims = userTable->get_array_of<std::string>("claims");
+            for (const auto& claim : *parsedClaims)
+            {
+                claims.append(QString().fromStdString(claim));
+            }
+
+            users.append(User(username, password, claims));
+        }
+
+    } catch (const cpptoml::parse_exception& e){
+        failConfiguration("Parsing error in " + file.fileName() + " :\n" + QString(e.what()) );
+    }
+
 }
 
 void Configuration::readKeys(QFile &privateKeyFile, QFile &publicKeyFile)

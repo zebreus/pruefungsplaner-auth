@@ -1,6 +1,6 @@
 #include "user.h"
 
-User::User(const QString &name, QString &password, const QList<QString> &claims) :
+User::User(const QString &name, const QString &password, const QList<QString> &claims) :
     name(name), password(password), claims(claims)
 {
 }
