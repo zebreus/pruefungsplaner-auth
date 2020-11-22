@@ -116,6 +116,16 @@ QString Configuration::getPrivateKey() const
     return privateKey;
 }
 
+const User Configuration::getUser(const QString &name) const
+{
+    for(const User& user: users){
+        if(user.getName() == name){
+            return user;
+        }
+    }
+    return User(name, "", QList<QString>());
+}
+
 void Configuration::loadConfiguration(const QFile& file)
 {
     try{
