@@ -1,6 +1,6 @@
 #include "configuration.h"
 
-Configuration::Configuration(const QList<QString> &arguments, QObject *parent) : QObject(parent)
+Configuration::Configuration(const QList<QString> &arguments, QObject *parent) : QObject(parent), address(""), port(0), privateKey(""), publicKey("")
 {
     QCommandLineParser parser;
     parser.setApplicationDescription("Pruefungsplaner authentication server");
@@ -159,7 +159,7 @@ void Configuration::generatePrivateKey(QFile& privateKeyFile)
     if(privateKeyFile.open(QIODevice::WriteOnly)){
         privateKeyFile.close();
     }else{
-        failConfiguration("Cannot generate new private key, because the file " + privateKeyFile.fileName() + " cannot be wrote.");
+        failConfiguration("Failed to generate private key, because the file " + privateKeyFile.fileName() + " cannot be created.");
     }
 
     QString generatePrivateKeyCommand("openssl genpkey -algorithm RSA -out %1 -pkeyopt rsa_keygen_bits:2048");
@@ -181,13 +181,13 @@ void Configuration::generatePublicKey(QFile &privateKeyFile, QFile &publicKeyFil
     if(privateKeyFile.open(QIODevice::ReadOnly)){
         privateKeyFile.close();
     }else{
-        failConfiguration("Cannot generate new public key, because the private key cannot be read.");
+        failConfiguration("Failed to generate public key, because the private key file " + publicKeyFile.fileName() + " cannot be opened.");
     }
 
     if(publicKeyFile.open(QIODevice::WriteOnly)){
         publicKeyFile.close();
     }else{
-        failConfiguration("Cannot generate new public key, because the file " + publicKeyFile.fileName() + " cannot be wrote.");
+        failConfiguration("Failed to generate public key, because the file " + publicKeyFile.fileName() + " cannot be created.");
     }
 
     QString generatePublicKeyCommand("openssl rsa -pubout -in %1 -out %2");
@@ -202,7 +202,8 @@ void Configuration::generatePublicKey(QFile &privateKeyFile, QFile &publicKeyFil
 
 void Configuration::checkPrivateKey(QFile &privateKeyFile)
 {
-    if(privateKeyFile.exists()){
+    privateKeyFile.close();
+    if(!privateKeyFile.exists()){
         failConfiguration("Private key file does not exist " + privateKeyFile.fileName() + ".");
     }
 
@@ -212,7 +213,7 @@ void Configuration::checkPrivateKey(QFile &privateKeyFile)
         failConfiguration("Private key file " + privateKeyFile.fileName() + " cannot be read.");
     }
 
-    QString checkPrivateKeyCommand("openssl rsa -in %1 -check");
+    QString checkPrivateKeyCommand("openssl rsa -in %1 -check -noout >/dev/null 2>&1");
 
     checkPrivateKeyCommand = checkPrivateKeyCommand.arg(privateKeyFile.fileName());
 
@@ -224,7 +225,7 @@ void Configuration::checkPrivateKey(QFile &privateKeyFile)
 
 void Configuration::checkPublicKey(QFile &publicKeyFile)
 {
-    if(publicKeyFile.exists()){
+    if(!publicKeyFile.exists()){
         failConfiguration("Public key file does not exist " + publicKeyFile.fileName() + ".");
     }
 
@@ -234,7 +235,7 @@ void Configuration::checkPublicKey(QFile &publicKeyFile)
         failConfiguration("Private key file " + publicKeyFile.fileName() + " cannot be read.");
     }
 
-    QString checkPublicKeyCommand("openssl pkey -inform PEM -pubin -in %1 -noout");
+    QString checkPublicKeyCommand("openssl pkey -inform PEM -pubin -in %1 -noout >/dev/null 2>&1");
 
     checkPublicKeyCommand = checkPublicKeyCommand.arg(publicKeyFile.fileName());
 
@@ -246,7 +247,7 @@ void Configuration::checkPublicKey(QFile &publicKeyFile)
 
 void Configuration::checkKeysAreMatching(QFile &privateKeyFile, QFile &publicKeyFile)
 {
-    QString checkKeysCommand("test \"$(openssl rsa -in '%1' -outform PEM -pubout)\" = \"$(openssl pkey -inform PEM -pubin -in '%2')\"");
+    QString checkKeysCommand("test \"$(openssl rsa -in '%1' -outform PEM -pubout 2>/dev/null)\" = \"$(openssl pkey -inform PEM -pubin -in '%2' 2>/dev/null)\" >/dev/null 2>&1");
 
     checkKeysCommand = checkKeysCommand.arg(privateKeyFile.fileName()).arg(publicKeyFile.fileName());
 
@@ -277,12 +278,12 @@ void Configuration::checkConfiguration()
         failConfiguration("The address " + address + " seems to be invalid.");
     }
 
-    if(!( privateKey.trimmed().startsWith("-----BEGIN PRIVATE KEY-----") && privateKey.trimmed().startsWith("-----END PRIVATE KEY-----") )){
-        failConfiguration("Your private key file could be invalid, or this check could be too basic. Anyway you should look into it.");
+    if(privateKey == ""){
+        failConfiguration("No private key specified.");
     }
 
-    if(!( publicKey.trimmed().startsWith("-----BEGIN PUBLIC KEY-----") && publicKey.trimmed().startsWith("-----END PUBLIC KEY-----") )){
-        failConfiguration("Your public key file could be invalid, or this check could be too basic. Anyway you should look into it.");
+    if(privateKey == ""){
+        failConfiguration("No public key specified.");
     }
 
     if(users.size() == 0){
