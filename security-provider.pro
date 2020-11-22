@@ -5,7 +5,7 @@ DEPENDPATH += $$PWD
 DEFINES += "DISABLE_PICOJSON"
 QT -= gui
 
-CONFIG += c++11 console
+CONFIG += c++2a console
 CONFIG -= app_bundle
 
 include($$PWD/libs/qt-jsonrpc-server/qt-jsonrpc-server.pri)
@@ -22,8 +22,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        src/configuration.cpp \
         src/main.cpp \
-        src/securityprovider.cpp
+        src/securityprovider.cpp \
+        src/user.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -34,7 +36,9 @@ LIBS += -L/usr/lib -lssl -lcrypto
 
 HEADERS += \
     src/QtJsonTraits.h \
-    src/securityprovider.h
+    src/configuration.h \
+    src/securityprovider.h \
+    src/user.h
 
 # Extra target to generate rsa256 keys
 keys.target = keys
