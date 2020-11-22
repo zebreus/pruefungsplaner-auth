@@ -71,7 +71,7 @@ Configuration::Configuration(const QList<QString> &arguments, QObject *parent) :
         for(auto configFilePath : defaultConfigurationFiles){
             QFile configFile(configFilePath);
             if(configFile.exists()){
-                loadConfiguration(QFile("./config.toml"));
+                loadConfiguration(configFile);
                 found = true;
                 break;
             }
@@ -149,6 +149,7 @@ void Configuration::loadConfiguration(const QFile& file)
 
         auto userTableArray = config->get_table_array("user");
 
+        if(userTableArray != nullptr){
         for (const auto& userTable : *userTableArray)
         {
             QString username;
@@ -174,6 +175,7 @@ void Configuration::loadConfiguration(const QFile& file)
             }
 
             users.append(User(username, password, claims));
+        }
         }
 
     } catch (const cpptoml::parse_exception& e){
