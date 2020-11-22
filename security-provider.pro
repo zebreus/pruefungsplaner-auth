@@ -1,6 +1,7 @@
 INCLUDEPATH += $$PWD/src
 INCLUDEPATH += $$PWD/libs
 INCLUDEPATH += $$PWD/libs/jwt-cpp/include
+INCLUDEPATH += $$PWD/libs/cpptoml/include
 DEPENDPATH += $$PWD
 DEFINES += "DISABLE_PICOJSON"
 QT -= gui
