@@ -14,25 +14,28 @@ QString SecurityProvider::getToken(QString userName, QString password, QJsonValu
     QList<QString> claims;
     QJsonArray audience;
 
-    if(userName == "test" && password == "test"){
+    const User& user = configuration->getUser(userName);
 
-    if(claimsArray.isArray()){
-        QJsonArray claimsJsonArray = claimsArray.toArray();
-        for(const QJsonValue& claimEntry : claimsJsonArray){
-            if(claimEntry.isString()){
-                claims.append(claimEntry.toString());
+    //TODO Maybe do not sign a token at all, if the password does not check
+    if(user.checkPassword(password)){
+        if(claimsArray.isArray()){
+            QJsonArray claimsJsonArray = claimsArray.toArray();
+            for(const QJsonValue& claimEntry : claimsJsonArray){
+                if(claimEntry.isString()){
+                    if(user.checkClaim(claimEntry.toString())){
+                        claims.append(claimEntry.toString());
+                    }
+                }
             }
         }
-    }
-
     }
 
     //Added registered and public claims
     jwt::builder tokenBuilder = jwt::create<qt_json_traits>()
     .set_type("JWT")
     .set_issuer("securityprovider")
-    //TODO maybe sanitize username
-    .set_subject(userName.toUtf8().constData())
+    .set_subject(user.getName().toUtf8().constData())
+    //TODO add audiences to config
     .set_audience(audiences)
     .set_issued_at(creationTime)
     .set_expires_at(expirationTime);
