@@ -13,20 +13,28 @@
 #include <array>
 #include <cpptoml.h>
 
+#ifndef DEFAULT_CONFIG_PATH
+#define DEFAULT_CONFIG_PATH "/etc/pruefungsplaner-auth"
+#endif
+#ifndef DEFAULT_KEYS_PATH
+#define DEFAULT_KEYS_PATH "/usr/share/pruefungsplaner-auth/keys"
+#endif
+
 class Configuration : public QObject
 {
     Q_OBJECT
 private:
-    static constexpr std::array defaultConfigurationFiles{"./config.toml",  "/etc/pruefungsplaner-config/config.toml", "/dev/null"};
+    static constexpr std::array defaultConfigurationFiles{DEFAULT_CONFIG_PATH "/config.toml", "/dev/null"};
     static constexpr auto defaultAddress = "0.0.0.0";
     static constexpr uint32_t defaultPort = 9092;
-    static constexpr auto defaultPrivateKey = "./private_key.pem";
-    static constexpr auto defaultPublicKey = "./public_key.pem";
+    static constexpr auto defaultPrivateKey = DEFAULT_KEYS_PATH "/private_key.pem";
+    static constexpr auto defaultPublicKey = DEFAULT_KEYS_PATH "/public_key.pem";
     QString address;
     quint16 port;
     QString privateKey;
     QString publicKey;
     QList<User> users;
+
 
 public:
     explicit Configuration(const QList<QString>& args, QObject *parent = nullptr);

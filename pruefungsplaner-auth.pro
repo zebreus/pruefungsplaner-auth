@@ -52,6 +52,9 @@ unix{
 !isEmpty(keys.path): INSTALLS += keys
 !isEmpty(datadir.path): INSTALLS += datadir
 
+DEFINES += DEFAULT_CONFIG_PATH=\"\\\"$${config.path}\\\"\" \
+           DEFAULT_KEYS_PATH=\"\\\"$${keys.path}\\\"\"
+
 
 LIBS += -L/usr/lib -lssl -lcrypto
 
