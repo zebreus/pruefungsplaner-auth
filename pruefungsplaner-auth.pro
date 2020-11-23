@@ -28,10 +28,30 @@ SOURCES += \
         src/main.cpp \
         src/user.cpp
 
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
+unix{
+    # Install executable
+    target.path = /usr/bin
+
+    # Install default config file
+    config.path = /etc/$${TARGET}/
+    config.files = res/config.toml
+
+    # Create data directory
+    datadir.path = /usr/share/$${TARGET}
+    datadir.extra = " "
+    datadir.uninstall = " "
+
+    # Create directory for keys
+    keys.path = $${datadir.path}/keys
+    keys.extra = " "
+    keys.uninstall = " "
+}
+
 !isEmpty(target.path): INSTALLS += target
+!isEmpty(config.path): INSTALLS += config
+!isEmpty(keys.path): INSTALLS += keys
+!isEmpty(datadir.path): INSTALLS += datadir
+
 
 LIBS += -L/usr/lib -lssl -lcrypto
 
