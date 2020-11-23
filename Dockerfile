@@ -7,13 +7,13 @@ ENV PATH="/usr/lib/qt5/bin/:${PATH}"
 #RUN git clone --recursive https://github.com/Zebreus/pruefungsplaner-auth.git /pruefungsplaner-auth
 COPY . /pruefungsplaner-auth
 
-RUN mkdir -p /install && cd /pruefungsplaner-auth/ && qmake && make -j4 install INSTALL_ROOT=/install/
+RUN mkdir -p /install && cd /pruefungsplaner-auth/ && qmake && make -j8 install INSTALL_ROOT=/install/
 
 FROM alpine:edge
 MAINTAINER Lennart E.
 
-RUN apk update && apk add qt5-qtbase qt5-qtwebsockets openssl
+RUN apk update && apk add qt5-qtbase qt5-qtwebsockets openssl tini
 COPY --from=auth-builder /install/ /
 
-ENTRYPOINT pruefungsplaner-auth
+ENTRYPOINT ["tini", "/usr/bin/pruefungsplaner-auth"]
 EXPOSE 80
