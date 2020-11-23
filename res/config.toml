@@ -1,0 +1,23 @@
+[server]
+# The adress on which the server should be listening
+#address = "0.0.0.0"
+# The port on which the server should be listening
+#port = 80
+
+[security]
+# The server signs the generated token with this key
+# If there is no key when starting the program an empty one is returned
+#privateKey = "/usr/share/pruefungsplaner-auth/keys/private_key.pem"
+#publicKey = "/usr/share/pruefungsplaner-auth/keys/public_key.pem"
+
+
+# You can add multiple users each with an own set of allowed claims
+#[[user]]
+#username = "test"
+#password = "test"
+#claims = ["pruefungsplanerRead", "pruefungsplanerWrite"]
+
+#[[user]]
+#username = "another user"
+#password = "password"
+#claims = ["alpha", "beta", "gamma"]
