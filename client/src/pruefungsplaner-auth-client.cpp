@@ -1,6 +1,6 @@
-#include <security-provider/client.h>
+#include <pruefungsplaner-auth/client.h>
 
-namespace securityprovider {
+namespace pruefungsplanerAuth {
 
 Client::Client(QObject *parent):
     QObject(parent), webSocket()

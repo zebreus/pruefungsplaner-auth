@@ -23,9 +23,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        src/authservice.cpp \
         src/configuration.cpp \
         src/main.cpp \
-        src/securityprovider.cpp \
         src/user.cpp
 
 # Default rules for deployment.
@@ -37,8 +37,8 @@ LIBS += -L/usr/lib -lssl -lcrypto
 
 HEADERS += \
     src/QtJsonTraits.h \
+    src/authservice.h \
     src/configuration.h \
-    src/securityprovider.h \
     src/user.h
 
 # Extra target to generate rsa256 keys

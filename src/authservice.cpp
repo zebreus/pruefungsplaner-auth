@@ -1,12 +1,12 @@
-#include "securityprovider.h"
+#include "authservice.h"
 
-SecurityProvider::SecurityProvider(const QSharedPointer<Configuration> &config, QObject *parent):
+AuthService::AuthService(const QSharedPointer<Configuration> &config, QObject *parent):
     QObject(parent), configuration(config)
 {
 
 }
 
-QString SecurityProvider::getToken(QString userName, QString password, QJsonValue claimsArray, QJsonArray audiences)
+QString AuthService::getToken(QString userName, QString password, QJsonValue claimsArray, QJsonArray audiences)
 {
     auto creationTime = std::chrono::system_clock::now();
     auto expirationTime = creationTime + std::chrono::seconds{3600};
@@ -49,12 +49,12 @@ QString SecurityProvider::getToken(QString userName, QString password, QJsonValu
     return token;
 }
 
-QString SecurityProvider::getPublicKey()
+QString AuthService::getPublicKey()
 {
     return configuration->getPublicKey();
 }
 
-QString SecurityProvider::getIssuer()
+QString AuthService::getIssuer()
 {
     return "securityprovider";
 }

@@ -1,5 +1,5 @@
-#ifndef SECURITYUSERCLIENT_H
-#define SECURITYUSERCLIENT_H
+#ifndef PRUEFUNGSPLANER_AUTH_CLIENT_H
+#define PRUEFUNGSPLANER_AUTH_CLIENT_H
 
 #include <QString>
 #include <QObject>
@@ -10,7 +10,7 @@
 #include <QJsonValue>
 #include <QJsonArray>
 
-namespace securityprovider{
+namespace pruefungsplanerAuth{
 
 class Client : public QObject
 {
@@ -78,4 +78,4 @@ private Q_SLOTS:
 
 }
 
-#endif // SECURITYUSERCLIENT_H
+#endif // PRUEFUNGSPLANER_AUTH_CLIENT_H

@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 #include <server.h>
-#include "securityprovider.h"
+#include "authservice.h"
 #include <QFile>
 #include <QTextStream>
 #include <QFileInfo>
@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     QSharedPointer<Configuration> config(new Configuration(a.arguments()));
 
     //TODO Add support for host address to server
-    jsonrpc::Server<SecurityProvider> server(config->getPort());
+    jsonrpc::Server<AuthService> server(config->getPort());
     server.setConstructorArguments(config);
     server.startListening();
 

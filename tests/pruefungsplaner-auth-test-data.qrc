@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/securityprovider/testdata">
+    <qresource prefix="/pruefungsplaner-auth-test/testdata">
         <file alias="private1.pem">data/private1.pem</file>
         <file alias="public1.pem">data/public1.pem</file>
         <file alias="private2.pem">data/private2.pem</file>

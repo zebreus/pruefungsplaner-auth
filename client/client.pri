@@ -3,7 +3,7 @@ INCLUDEPATH += $$PWD/include
 QT += websockets
 
 SOURCES += \
-    $$PWD/src/security-provider-client.cpp
+    $$PWD/src/pruefungsplaner-auth-client.cpp
 
 HEADERS += \
-    $$PWD/include/security-provider/security-provider-client.h
+    $$PWD/include/pruefungsplaner-auth/pruefungsplaner-auth-client.h

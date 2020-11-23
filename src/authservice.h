@@ -1,5 +1,5 @@
-#ifndef SECURITYPROVIDER_H
-#define SECURITYPROVIDER_H
+#ifndef AUTHSERVICE_H
+#define AUTHSERVICE_H
 
 #include <QObject>
 #include <QString>
@@ -11,13 +11,13 @@
 #include "configuration.h"
 #include <QSharedPointer>
 
-class SecurityProvider : public QObject
+class AuthService : public QObject
 {
     Q_OBJECT
 private:
     QSharedPointer<Configuration> configuration;
 public:
-    explicit SecurityProvider(const QSharedPointer<Configuration>& configuration, QObject *parent = nullptr);
+    explicit AuthService(const QSharedPointer<Configuration>& configuration, QObject *parent = nullptr);
 
 public slots:
     QString getToken(QString userName, QString password, QJsonValue claimsArray, QJsonArray audiences);
@@ -28,4 +28,4 @@ signals:
 
 };
 
-#endif // SECURITYPROVIDER_H
+#endif // AUTHSERVICE_H
