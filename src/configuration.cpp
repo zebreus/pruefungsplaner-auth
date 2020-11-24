@@ -345,7 +345,7 @@ void Configuration::checkConfiguration()
         failConfiguration("No private key specified.");
     }
 
-    if(privateKey == ""){
+    if(publicKey == ""){
         failConfiguration("No public key specified.");
     }
 
