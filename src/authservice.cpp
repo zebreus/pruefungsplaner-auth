@@ -33,7 +33,7 @@ QString AuthService::getToken(QString userName, QString password, QJsonValue cla
     //Added registered and public claims
     jwt::builder tokenBuilder = jwt::create<qt_json_traits>()
     .set_type("JWT")
-    .set_issuer("securityprovider")
+    .set_issuer("pruefungsplaner-auth")
     .set_subject(user.getName().toUtf8().constData())
     //TODO add audiences to config
     .set_audience(audiences)
@@ -56,5 +56,5 @@ QString AuthService::getPublicKey()
 
 QString AuthService::getIssuer()
 {
-    return "securityprovider";
+    return "pruefungsplaner-auth";
 }
