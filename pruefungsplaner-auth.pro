@@ -28,6 +28,25 @@ SOURCES += \
         src/main.cpp \
         src/user.cpp
 
+test{
+    include($$PWD/libs/gtest/gtest_dependency.pri)
+
+    QT *= testlib
+    TEMPLATE = app
+    TARGET = pruefungsplaner-auth-tests
+    INCLUDEPATH *= $$PWD/src
+
+    CONFIG *= thread
+    LIBS *= -lgtest
+
+    SOURCES -= src/main.cpp
+    SOURCES += libs/gtest/main.cpp
+}
+else{
+    TEMPLATE = app
+    TARGET = pruefungsplaner-auth
+}
+
 unix{
     # Install executable
     target.path = /usr/bin
